@@ -2035,6 +2035,17 @@ _**default value**_:
 }
 ```
 
+### determineEndpointsFromIssuer
+
+Use the issuer URL to generate the OIDC endpoints. Useful in cases when server is behind proxy and use of x-forwarded-* headers are restricted.   
+  
+
+
+_**default value**_:
+```js
+false
+```
+
 ### discovery
 
 Pass additional properties to this object to extend the discovery document  

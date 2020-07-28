@@ -1126,6 +1126,8 @@ export interface Configuration {
     userinfoEncryptionEncValues?: EncryptionEncValues[];
     userinfoSigningAlgValues?: SigningAlgorithmWithNone[];
   };
+
+  determineEndpointsFromIssuer?: boolean;
 }
 
 export type NoneAlg = 'none';

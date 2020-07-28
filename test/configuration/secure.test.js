@@ -66,4 +66,26 @@ describe('x-forwarded-proto trust, detection and warnings', () => {
       expect(console.warn.called).to.be.false;
     });
   });
+
+  context('when trusted but overridden by issuer', () => {
+    before(bootstrap(__dirname, { protocol: 'http:', determineEndpointsFromIssuer: true }));
+    it('is trusted when proxy=true is set on the koa app', async function () {
+      if (this.app) {
+        this.app.proxy = true;
+      } else {
+        this.provider.app.proxy = true;
+      }
+      await this.agent.get('/.well-known/openid-configuration', acceptUnauthorized)
+        .set('x-forwarded-proto', 'https')
+        .expect(200)
+        .expect(/"authorization_endpoint":"http:/);
+
+      await this.agent.get('/.well-known/openid-configuration', acceptUnauthorized)
+        .set('x-forwarded-proto', 'https')
+        .expect(200)
+        .expect(/"authorization_endpoint":"http:/);
+
+      expect(console.warn.called).to.be.false;
+    });
+  });
 });

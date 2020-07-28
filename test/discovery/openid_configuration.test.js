@@ -86,3 +86,33 @@ describe(route, () => {
     });
   });
 });
+
+describe(route, () => {
+  before(bootstrap(__dirname, {
+    determineEndpointsFromIssuer: false,
+    issuerOverride: 'https://example.com',
+  }));
+
+  it('does not use issuer to determine endpoints', function () {
+    return this.agent.get('/.well-known/openid-configuration')
+      .expect(200)
+      .expect((response) => {
+        expect(response.body["authorization_endpoint"]).to.not.equal("https://example.com/auth");
+      });
+  });
+});
+
+describe(route, () => {
+  before(bootstrap(__dirname, {
+    determineEndpointsFromIssuer: true,
+    issuerOverride: 'https://example.com',
+  }));
+
+  it('uses issuer to determine endpoints', function () {
+    return this.agent.get('/.well-known/openid-configuration')
+      .expect(200)
+      .expect((response) => {
+        expect(response.body["authorization_endpoint"]).to.equal("https://example.com/auth");
+      });
+  });
+});

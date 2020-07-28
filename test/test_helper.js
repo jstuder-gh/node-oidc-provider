@@ -67,6 +67,8 @@ module.exports = function testHelper(dir, {
   protocol = 'http:',
   mountVia = process.env.MOUNT_VIA,
   mountTo = mountVia ? process.env.MOUNT_TO || '/' : '/',
+  determineEndpointsFromIssuer = false,
+  issuerOverride = undefined,
 } = {}) {
   const afterPromises = [];
 
@@ -88,10 +90,11 @@ module.exports = function testHelper(dir, {
       config.findAccount = Account.findAccount;
     }
 
-    const issuerIdentifier = `${protocol}//127.0.0.1:${port}`;
+    const issuerIdentifier = issuerOverride || `${protocol}//127.0.0.1:${port}`;
 
     const provider = new Provider(issuerIdentifier, {
       clients,
+      determineEndpointsFromIssuer,
       jwks: global.keystore.toJWKS(true),
       adapter: TestAdapter,
       ...config,
